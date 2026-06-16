@@ -214,7 +214,7 @@
             </div>
 
             <div class="text-box" contenteditable="true">
-                {{ slide.text | default('[Haz clic aquí para agregar tu texto]', true) }}
+                {{ slide.text | default('[Haz clic aquí para agregar tu texto]', true) | safe }}
             </div>
         </div>
         <div class="slide-number">{{ loop.index }}</div>
