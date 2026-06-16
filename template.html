@@ -90,14 +90,17 @@
         }
         .images-container[data-count="4"] img {
             max-width: 48%;
-            max-height: 22vh; /* Se distribuyen en 2x2 */
+            max-height: 24vh; /* Se distribuyen en 2x2 */
         }
         .images-container[data-count="5"] img,
-        .images-container[data-count="6"] img,
+        .images-container[data-count="6"] img {
+            max-width: 31%; /* 3 por fila, ideal para 5 o 6 fotos */
+            max-height: 24vh;
+        }
         .images-container[data-count="7"] img,
         .images-container[data-count="8"] img {
-            max-width: 23%;
-            max-height: 22vh;
+            max-width: 23%; /* 4 por fila */
+            max-height: 24vh;
         }
         /* Cuadro de texto editable / reservado */
         .text-box {
