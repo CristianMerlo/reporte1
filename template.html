@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presentación Mostaza</title>
+    <title>Mostaza - Reporte de Imágenes Caseros</title>
     <style>
         :root {
             --mostaza-red: #E2001A;
@@ -48,6 +48,15 @@
             position: absolute;
             top: 0;
             left: 0;
+        }
+        .slide-logo {
+            position: absolute;
+            top: 95px;
+            right: 40px;
+            height: 55px;
+            width: auto;
+            object-fit: contain;
+            z-index: 10;
         }
         /* Contenido de la diapositiva */
         .content {
@@ -151,6 +160,11 @@
                 padding: 0 20px;
                 font-size: 18px;
             }
+            .slide-logo {
+                top: 70px;
+                right: 20px;
+                height: 35px;
+            }
             .content {
                 margin-top: 80px;
                 margin-bottom: 60px; /* Room for slide number */
@@ -203,8 +217,9 @@
     {% for slide in slides %}
     <section class="slide" id="slide-{{ loop.index }}">
         <div class="banner">
-            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+            <span>MOSTAZA - REPORTE DE IMÁGENES CASEROS</span>
         </div>
+        <img class="slide-logo" src="assets/logo.png" alt="Logo Mostaza">
         <div class="content">
             {% if slide.theme %}
             <div class="slide-theme">{{ slide.theme }}</div>
@@ -229,6 +244,7 @@
         <div class="banner">
             <span>MOSTAZA - SIN DATOS</span>
         </div>
+        <img class="slide-logo" src="assets/logo.png" alt="Logo Mostaza">
         <div class="content">
             <p>No se generaron diapositivas. Agrega imágenes a la carpeta source y corre el script.</p>
         </div>

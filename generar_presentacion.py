@@ -110,13 +110,16 @@ def main():
             with open(path_completo, 'r', encoding='utf-8') as f:
                 texto_contexto += f.read() + "\n"
                 
-    if not archivos_imagenes:
-        print("No se encontraron imágenes en la carpeta 'source'.")
-        sys.exit(0)
-
     # Verificar si se quiere refrescar o si no existe slides.json
     refresh = "--refresh" in sys.argv or "-r" in sys.argv
     
+    if not archivos_imagenes:
+        if os.path.exists(slides_json_path) and not refresh:
+            print("No se encontraron nuevas imágenes en 'source', pero se utilizará el slides.json existente.")
+        else:
+            print("No se encontraron imágenes en la carpeta 'source' y no hay slides.json existente.")
+            sys.exit(0)
+            
     if os.path.exists(slides_json_path) and not refresh:
         print(f"Cargando estructura de diapositivas existente desde: {slides_json_path}")
         with open(slides_json_path, 'r', encoding='utf-8') as f:
@@ -148,11 +151,26 @@ def main():
     for img_path in archivos_imagenes:
         shutil.copy2(img_path, output_assets_dir)
         
+    # Copiar logo si existe en img o IMG
+    logo_copiado = False
+    for folder in ["img", "IMG"]:
+        logo_origen = os.path.join(base_dir, folder, "logo.png")
+        if os.path.exists(logo_origen):
+            shutil.copy2(logo_origen, os.path.join(output_assets_dir, "logo.png"))
+            print(f"Logo copiado con éxito desde la carpeta '{folder}'.")
+            logo_copiado = True
+            break
+    if not logo_copiado:
+        print("Advertencia: No se encontró logo.png en 'img' ni en 'IMG'.")
+        
     # Ajustar rutas en la estructura `slides` para el HTML
     for slide in slides:
         rutas_relativas = []
         for img_name in slide.get("images", []):
-            rutas_relativas.append(f"assets/{img_name}")
+            if img_name.startswith("assets/"):
+                rutas_relativas.append(img_name)
+            else:
+                rutas_relativas.append(f"assets/{img_name}")
         slide["images"] = rutas_relativas
         
     # 3. Generar HTML con Jinja2
