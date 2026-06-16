@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación Mostaza</title>
+    <style>
+        :root {
+            --mostaza-red: #E2001A;
+            --mostaza-yellow: #FFC000; /* As a potential accent */
+            --text-color: #333;
+            --bg-color: #FFFFFF;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+        .slide {
+            height: 100vh;
+            width: 100vw;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 20px;
+            page-break-after: always;
+        }
+        /* Banner superior */
+        .banner {
+            width: 100%;
+            height: 80px;
+            background-color: var(--mostaza-red);
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        /* Contenido de la diapositiva */
+        .content {
+            margin-top: 100px; /* Debajo del banner */
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        .images-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            max-height: 50vh;
+            width: 90%;
+        }
+        .images-container img {
+            max-width: 100%;
+            max-height: 45vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        /* Layout para diferentes cantidades de imagenes */
+        .images-container[data-count="1"] img {
+            max-width: 80%;
+            max-height: 45vh;
+        }
+        .images-container[data-count="2"] img {
+            max-width: 48%;
+            max-height: 45vh;
+        }
+        .images-container[data-count="3"] img {
+            max-width: 31%;
+            max-height: 45vh;
+        }
+        .images-container[data-count="4"] img {
+            max-width: 48%;
+            max-height: 22vh; /* Se distribuyen en 2x2 */
+        }
+        .images-container[data-count="5"] img,
+        .images-container[data-count="6"] img,
+        .images-container[data-count="7"] img,
+        .images-container[data-count="8"] img {
+            max-width: 23%;
+            max-height: 22vh;
+        }
+        /* Cuadro de texto editable / reservado */
+        .text-box {
+            width: 80%;
+            min-height: 150px;
+            border: 2px dashed #ccc;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            color: #777;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Identificador de Slide */
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            font-size: 48px;
+            font-weight: 900;
+            color: rgba(226, 0, 26, 0.2); /* Rojo Mostaza semi-transparente */
+        }
+        /* Tema de la slide (clasificacion IA) */
+        .slide-theme {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--mostaza-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        /* Responsive adjustments for tablet and mobile devices */
+        @media (max-width: 768px) {
+            body {
+                scroll-snap-type: none; /* Disable snapping on mobile for smoother flow */
+                overflow-y: auto;
+            }
+            .slide {
+                height: auto;
+                min-height: 100vh;
+                scroll-snap-align: none;
+                padding: 15px;
+            }
+            .banner {
+                height: 60px;
+                padding: 0 20px;
+                font-size: 18px;
+            }
+            .content {
+                margin-top: 80px;
+                margin-bottom: 60px; /* Room for slide number */
+                width: 100%;
+            }
+            .images-container {
+                max-height: none;
+                width: 100%;
+                gap: 10px;
+            }
+            .images-container img {
+                max-height: 30vh;
+            }
+            /* Stack or use 2 columns on mobile */
+            .images-container[data-count="1"] img {
+                max-width: 100%;
+            }
+            .images-container[data-count="2"] img,
+            .images-container[data-count="3"] img,
+            .images-container[data-count="4"] img {
+                max-width: 48%;
+            }
+            .images-container[data-count="5"] img,
+            .images-container[data-count="6"] img,
+            .images-container[data-count="7"] img,
+            .images-container[data-count="8"] img {
+                max-width: 48%; /* 2 columns max on mobile */
+                max-height: 15vh;
+            }
+            .text-box {
+                width: 100%;
+                min-height: 100px;
+                font-size: 16px;
+                padding: 15px;
+            }
+            .slide-number {
+                bottom: 15px;
+                right: 20px;
+                font-size: 32px;
+            }
+            .slide-theme {
+                font-size: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+    <section class="slide" id="slide-1">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Hornos</div>
+            
+            
+            <div class="images-container" data-count="2">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.23 (2).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.24 (2).jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                Se debe desarmar la puerta y cambiar las bisagras. La tarea está coordinada para realizarse el lunes.
+            </div>
+        </div>
+        <div class="slide-number">1</div>
+    </section>
+    
+    <section class="slide" id="slide-2">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Máquina de helados</div>
+            
+            
+            <div class="images-container" data-count="4">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.15 (2).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.14.jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.15 (1).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.14 (1).jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                El equipo se encuentra operativo. Respecto a la parte rota/faltante, se identificó que se trata del freezer door. Se estará pidiendo cotización para evaluar el costo de reemplazar esa pieza o ver si es posible repararla.
+            </div>
+        </div>
+        <div class="slide-number">2</div>
+    </section>
+    
+    <section class="slide" id="slide-3">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Cámara de congelados</div>
+            
+            
+            <div class="images-container" data-count="2">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.24 (1).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.23 (3).jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                Se está planificando una limpieza de todo el sistema de desagote para evitar posibles obstrucciones y bloqueos que provocan que se rebalse y el agua se condense dentro de la cámara. Programado para el lunes.
+            </div>
+        </div>
+        <div class="slide-number">3</div>
+    </section>
+    
+    <section class="slide" id="slide-4">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Freidoras</div>
+            
+            
+            <div class="images-container" data-count="3">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.20.jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.19 (2).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.19.jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                Se programó para el lunes el cambio de bisagras en las puertas, la reparación de las mismas y la reparación de la parte trasera del equipo para que quede bien instalado.
+            </div>
+        </div>
+        <div class="slide-number">4</div>
+    </section>
+    
+    <section class="slide" id="slide-5">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Cableados y Cocina</div>
+            
+            
+            <div class="images-container" data-count="4">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.22 (2).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.22.jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.24.jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.21.jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                Se está coordinando la instalación de cableados eléctricos para el correcto funcionamiento de todas las lámparas. Además, en la cocina se está coordinando la instalación de un toma estanco adicional para el microondas.
+            </div>
+        </div>
+        <div class="slide-number">5</div>
+    </section>
+    
+    <section class="slide" id="slide-6">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Retención / Transfer de papas</div>
+            
+            
+            <div class="images-container" data-count="3">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.19 (1).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.23.jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.13.jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                Se estará coordinando el cambio del vidrio lateral que está marcado.
+
+Producción: Solicitaron la instalación de un termotanque adicional, ya que hay sectores del local a los que no llega el agua caliente. Se está coordinando su instalación.
+
+Cafetera: Puesta a punto ya realizada durante la visita técnica; el equipo quedó operando. Se solicitarán algunas piezas para el kit preventivo.
+            </div>
+        </div>
+        <div class="slide-number">6</div>
+    </section>
+    
+    <section class="slide" id="slide-7">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Pata de broiler y Heladera vertical</div>
+            
+            
+            <div class="images-container" data-count="2">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.21 (1).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.21 (3).jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                Para la pata de broiler, se está coordinando su reparación para el lunes. Para la heladera vertical, se está coordinando la instalación de una tapa faltante.
+            </div>
+        </div>
+        <div class="slide-number">7</div>
+    </section>
+    
+    <section class="slide" id="slide-8">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Adecuaciones, cielorrasos y techos</div>
+            
+            
+            <div class="images-container" data-count="4">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.17 (1).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.22 (3).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.17 (3).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.15.jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                Se está enviando un correo a obra reclamando por las goteras, ya que estarían dentro de la garantía. En base a la respuesta, se definirá cómo avanzar con este punto.
+            </div>
+        </div>
+        <div class="slide-number">8</div>
+    </section>
+    
+    <section class="slide" id="slide-9">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Iluminación y cielorrasos</div>
+            
+            
+            <div class="images-container" data-count="5">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.17 (2).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.17.jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.23 (1).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.16.jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.18 (1).jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                Se coordinará el cambio de la iluminación en mal estado. Los cielorrasos marcados se suman al reclamo de obra. En cuanto a backing, se estará amurando la salida cercana a los termotanques.
+            </div>
+        </div>
+        <div class="slide-number">9</div>
+    </section>
+    
+    <section class="slide" id="slide-10">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Paredes y revestimientos</div>
+            
+            
+            <div class="images-container" data-count="4">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.16 (2).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.22 (4).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.22 (1).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.18.jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                Se estarán realizando adecuaciones durante la semana.
+            </div>
+        </div>
+        <div class="slide-number">10</div>
+    </section>
+    
+    <section class="slide" id="slide-11">
+        <div class="banner">
+            <span>MOSTAZA - REPORTE DE IMÁGENES</span>
+        </div>
+        <div class="content">
+            
+            <div class="slide-theme">Pisos y desagües / Puertas y baños</div>
+            
+            
+            <div class="images-container" data-count="7">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.18 (3).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.21 (2).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.18 (2).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.20 (3).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.20 (2).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.20 (1).jpeg" alt="Imagen de reporte">
+                
+                <img src="assets/WhatsApp Image 2026-06-11 at 13.45.16 (1).jpeg" alt="Imagen de reporte">
+                
+            </div>
+
+            <div class="text-box" contenteditable="true">
+                Al igual que en el punto anterior, se estarán realizando adecuaciones durante la semana.
+            </div>
+        </div>
+        <div class="slide-number">11</div>
+    </section>
+    
+
+    
+
+</body>
+</html>
