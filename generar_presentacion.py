@@ -87,7 +87,7 @@ Reglas ESTRICTAS de clasificación y orden:
 def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     source_dir = os.path.join(base_dir, "source")
-    output_dir = os.path.join(base_dir, "output")
+    output_dir = os.path.join(base_dir, "docs")
     slides_json_path = os.path.join(output_dir, "slides.json")
     
     # Crear carpetas si no existen
